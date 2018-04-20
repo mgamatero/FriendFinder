@@ -1,54 +1,21 @@
 // npm packages
 var express = require('express')
 var bodyparser = require('body-parser')
+var fs = require('fs')
 var path = require('path')
-//var morgan = morgan('dev')
+
 
 // new express app
 var app = express()
 
 // middleware
-// app.use(morgan('dev'))
-//app.use(express.static(path.join(__dirname, 'public/views')))
+app.use(express.static(path.join(__dirname, 'public/views')))
 app.use(bodyparser.urlencoded({ extended: true }))
 app.use(bodyparser.json())
 
-//var playerArray = []
-
-
-//used by addPlayer.html  -------------------------
-app.post('/addPlayer', function (req, res) {
-  req.body
-  playerArray.push(req.body)
-  console.log(playerArray)
-  //req.body happens only when there are passed entries from addPlayer.html
-})
-//---------------------------------------------
-
-//used by viewPlayers.html-------------------------
-app.post('/deleteRoster', function (req, res) {
-  playerArray = []
-})
-
-app.get('/getPlayers', function (req, res) {
-  res.json(playerArray)
-})
-//--------------------------------------------------
-
-// These set the .html files ---------------
-app.get("/", function (req, res) {
-  res.sendFile('/app/public/home.html', { root: __dirname });
-});
-
-app.get("/survey", function (req, res) {
-  res.sendFile('/app/public/survey.html', { root: __dirname });
-});
-
-app.get("/add", function (req, res) {
-  res.sendFile('/public/views/addPlayer.html', { root: __dirname });
-});
-
-// --------------------------------------
+//Routes
+require('./app/routing/htmlRoutes.js')(app)
+require('./app/routing/apiRoutes.js')(app)
 
 var PORT = process.env.PORT || 3000
 // listening port
